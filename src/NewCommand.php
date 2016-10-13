@@ -59,7 +59,7 @@ class NewCommand extends Command
         }";
 
         $indexFile = "<?php
-        require_once 'vendor/autoload.php';
+        require_once '../vendor/autoload.php';
 
         use GetKep\Kep\Routing\Route;
         Route::group('v1', function () {
