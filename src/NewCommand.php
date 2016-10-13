@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class KepCommand extends Command
+class NewCommand extends Command
 {
     protected function configure()
     {
@@ -33,11 +33,11 @@ class KepCommand extends Command
 
         $commands = [
             'mkdir '.$input->getArgument('name'),
+            'mkdir '.$input->getArgument('name').'/v1',
+            'mkdir '.$input->getArgument('name').'/v1/controllers',
+            'mkdir '.$input->getArgument('name').'/v1/models',
+            'mkdir '.$input->getArgument('name').'/v1/seeds',
             'cd '.$input->getArgument('name'),
-            'mkdir controllers',
-            'mkdir models',
-            'mkdir seeds',
-            'cd ..',
             $composer.' require getkep/kep 0.3.2'
         ];
 
