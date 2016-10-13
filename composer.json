@@ -1,0 +1,25 @@
+{
+    "name": "getkep/installer",
+    "description": "Kep application installer.",
+    "keywords": ["kep"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matuzalém Teles",
+            "email": "matuzalemteles@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Kep\\Installer\\Console\\": "src/"
+        }
+    },
+    "require": {
+        "symfony/console": "~2.3|~3.0",
+        "symfony/process": "~2.3|~3.0",
+        "kepphp/kep": "0.3.2"
+    },
+    "bin": [
+        "kep"
+    ]
+}
