@@ -31,13 +31,51 @@ class NewCommand extends Command
 
         $composer = $this->findComposer();
 
+        $configFile = "<?php
+        class configuration
+        {
+            public function config()
+            {
+                return [
+                    'directory' => 'v1',
+                    'connections' => [
+                        'mysql' => [
+                            'driver' => 'mysqli',
+                            'host' => 'localhost',
+                            'database' => 'Data',
+                            'username' => 'root',
+                            'password' => 'password',
+                        ],
+                    ],
+                    'authentication' => [
+                        'mysql' => [
+                            'activate' => true,
+                            'table' => 'Tabela',
+                            'column' => 'Coluna',
+                        ],
+                    ],
+                ];
+            }
+        }";
+
+        $indexFile = "<?php
+        require_once 'vendor/autoload.php';
+
+        use GetKep\Kep\Routing\Route;
+        Route::group('v1', function () {
+
+        });
+        ";
+
         $commands = [
             'mkdir '.$input->getArgument('name'),
-            'mkdir '.$input->getArgument('name').'/v1',
-            'mkdir '.$input->getArgument('name').'/v1/controllers',
-            'mkdir '.$input->getArgument('name').'/v1/models',
-            'mkdir '.$input->getArgument('name').'/v1/seeds',
             'cd '.$input->getArgument('name'),
+            'mkdir v1',
+            'mkdir v1/controllers',
+            'mkdir v1/models',
+            'mkdir v1/seeds',
+            'echo '.'"'.$configFile.'"'.' >> config.php',
+            'echo '.'"'.$indexFile.'"'.' >> v1/index.php',
             $composer.' require getkep/kep 0.3.2'
         ];
 
