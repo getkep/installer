@@ -31,7 +31,39 @@ class NewCommand extends Command
 
         $composer = $this->findComposer();
 
-        $configFile = "<?php
+        $commands = [
+            'mkdir '.$input->getArgument('name'),
+            'cd '.$input->getArgument('name'),
+            'mkdir v1',
+            'mkdir v1/controllers',
+            'mkdir v1/models',
+            'mkdir v1/seeds',
+            'echo '.'"'.$this->configFile().'"'.' >> config.php',
+            'echo '.'"'.$this->indexFile().'"'.' >> v1/index.php',
+            $composer.' require getkep/kep 0.3.2'
+        ];
+
+        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
+
+        $process->run(function ($type, $line) use ($output) {
+           $output->write($line);
+        });
+
+        $output->writeln('<comment>Application ready! Start scaling APIs.</comment>');
+    }
+
+    protected function verifyApplicationDoesntExist($directory, OutputInterface $output)
+    {
+        if ((is_dir($directory) || is_file($directory)) && $directory != getcwd()) {
+            throw new RuntimeException('Application already exists!');
+        }
+
+        $output->writeln($directory);
+    }
+
+    protected function configFile()
+    {
+        return "<?php
         class configuration
         {
             public function config()
@@ -57,8 +89,11 @@ class NewCommand extends Command
                 ];
             }
         }";
+    }
 
-        $indexFile = "<?php
+    protected function indexFlie()
+    {
+        return "<?php
         require_once '../vendor/autoload.php';
 
         use GetKep\Kep\Routing\Route;
@@ -66,35 +101,6 @@ class NewCommand extends Command
 
         });
         ";
-
-        $commands = [
-            'mkdir '.$input->getArgument('name'),
-            'cd '.$input->getArgument('name'),
-            'mkdir v1',
-            'mkdir v1/controllers',
-            'mkdir v1/models',
-            'mkdir v1/seeds',
-            'echo '.'"'.$configFile.'"'.' >> config.php',
-            'echo '.'"'.$indexFile.'"'.' >> v1/index.php',
-            $composer.' require getkep/kep 0.3.2'
-        ];
-
-        $process = new Process(implode(' && ', $commands), $directory, null, null, null);
-
-        $process->run(function ($type, $line) use ($output) {
-           $output->write($line);
-        });
-
-        $output->writeln('<comment>Application ready! Start scaling APIs.</comment>');
-    }
-
-    protected function verifyApplicationDoesntExist($directory, OutputInterface $output)
-    {
-        if ((is_dir($directory) || is_file($directory)) && $directory != getcwd()) {
-            throw new RuntimeException('Application already exists!');
-        }
-
-        $output->writeln($directory);
     }
 
     protected function findComposer()
